@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đặt phòng ngay</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      margin-top: 60px;
+    }
+
+    header {
+      background: #cceeff;
+      padding: 10px 20px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header img {
+      height: 40px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      padding: 8px 12px;
+      font-size: 17px;
+      display: inline-block;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    nav a.active {
+      background: #cceeff;
+      border-radius: 4px;
+      transform: scale(0.95);
+    }
+
+    nav a:hover {
+      background: #ffe066;
+      border-radius: 4px;
+      transform: scale(1.05);
+    }
+
+    .user-icon {
+      font-size: 20px;
+      cursor: pointer;
+      padding-left: 20px;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      background: white;
+      border: 1px solid #ccc;
+      list-style: none;
+      padding: 10px;
+      margin-top: 5px;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    .banner {
+      background-image: url('https://media.vneconomy.vn/images/upload/2022/01/18/du-lich-dn-2.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .banner h1 {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    .booking-form {
+      background: white;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      color: black;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      border-radius: 10px;
+    }
+
+    .booking-form input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .booking-form input[type="email"] {
+      grid-column: span 2;
+    }
+
+    .btn-red {
+      grid-column: span 2;
+      padding: 10px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .popular-rooms {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .room-card {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .room-card img {
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    .stars {
+      color: gold;
+      margin: 5px 0;
+    }
+
+    footer {
+      background-color: #c3eaff;
+      padding: 20px;
+    }
+
+    .footer-info {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      width: 40px;
+    }
+
+    footer ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .account-panel {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 40px;
+      width: 300px;
+      background: #cceeff;
+      border: 1px solid #999;
+      border-radius: 10px;
+      padding: 20px;
+      z-index: 999;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .account-panel h3, .account-panel h4 {
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .form-box {
+      margin-bottom: 15px;
+    }
+
+    .form-box input,
+    .form-box textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .btn-submit {
+      background-color: #ff5e5e;
+      border: none;
+      padding: 8px;
+      width: 100%;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: #e14c4c;
+      transform: scale(1.02);
+    }
+
+    .success-msg {
+      color: green;
+      margin-top: 10px;
+      display: none;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logoo.png" alt="Logo">
+    <nav>
+      <a href="#">Trang chủ</a>
+      <a href="#">Điểm đến</a>
+      <a href="#">Ẩm thực</a>
+      <a href="#">Dịch vụ</a>
+      <div class="dropdown">
+        <a href="javascript:void(0);" onclick="toggleDropdown(event)" class="active">Đặt chỗ</a>
+        <ul class="dropdown-menu" id="bookingDropdown">
+          <li><a href="dătphong.html">Đặt phòng khách sạn</a></li>
+          <li><a href="tourdulich.html">Tour du lịch</a></li>
+          <li><a href="đătxe.html">Đặt xe</a></li>
+        </ul>
+      </div>
+    </nav>
+    <span class="user-icon" aria-label="Tài khoản người dùng" title="Tài khoản">👤</span>
+    <div class="account-panel" id="accountPanel">
+      <h3>Quản Lý Tài Khoản</h3>
+      <div class="form-box">
+        <input type="text" placeholder="Tên đăng nhập" id="username" required>
+        <input type="email" placeholder="Gmail" id="gmail" required>
+      </div>
+      <div class="form-box">
+        <h4>Lịch sử đặt</h4>
+        <input type="text" placeholder="Tour du lịch" id="tour">
+        <input type="text" placeholder="Đặt xe" id="car">
+        <h4>Đánh giá của bạn</h4>
+        <textarea placeholder="Hãy chia sẻ trải nghiệm của bạn..." id="review" required></textarea>
+        <button class="btn-submit" onclick="submitReview()">Gửi đánh giá</button>
+        <p class="success-msg" id="successMsg">🎉 Đã gửi đánh giá thành công!</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner">
+    <h1>Đặt phòng ngay</h1>
+    <div class="booking-form">
+      <input type="text" placeholder="Họ và tên" required>
+      <input type="date" placeholder="Ngày nhận phòng" required>
+      <input type="text" placeholder="Số điện thoại" required>
+      <input type="date" placeholder="Ngày trả phòng" required>
+      <input type="email" placeholder="Gmail" required>
+      <button class="btn-red" id="paymentBtn" onclick="handlePayment()">Thanh toán và xác nhận qua gmail</button>
+      <p id="paymentSuccess" class="success-msg">✅ Thanh toán thành công! Đã gửi xác nhận qua Gmail.</p>
+    </div>
+  </div>
+
+  <section class="popular-rooms">
+    <h2>Phòng phổ biến</h2>
+    <div class="room-grid">
+      <div class="room-card">
+        <img src="https://lh4.googleusercontent.com/0R4coD1AWHhDjQPASoKjmjnAmm9MayvuVww6dzVGnSK2qawebaMsV_nn5jSyb0edt-oPvpM0qG4E49rV8w1by8Xgog8I2s__YRBHRujzmmXZSe9Z7KB9tKNztyp_X7zM9OFEW3R4pkmpbN15W9HFfwuC08FjEcHIOYBxzL8aEdU9EuW0NKKcXLx_ag" alt="">
+        <h3>Phòng tiêu chuẩn</h3>
+        <p>2.000.000 VND</p>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <button class="book-btn" onclick="location.href='phong.html'">Xem chi tiết </button>
+      </div>
+      <div class="room-card">
+        <img src="https://studiochupanhdep.com/Upload/Newsimages/phong-khach-san-tt-studio.jpg" alt="">
+        <h3>Phòng tổng thống</h3>
+        <p>6.000.000 VND</p>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <button class="book-btn" onclick="location.href='phong.html'">Xem chi tiết </button>
+      </div>
+      <div class="room-card">
+        <img src="https://ik.imagekit.io/tvlk/apr-asset/dgXfoyh24ryQLRcGq00cIdKHRmotrWLNlvG-TxlcLxGkiDwaUSggleJNPRgIHCX6/hotel/asset/67762161-2449x1632-FIT_AND_TRIM-eefdcef398d484c8496c6bb63bdae612.jpeg" alt="">
+        <h3>Phòng cặp đôi</h3>
+        <p>3.000.000 VND</p>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <button class="book-btn" onclick="location.href='phong.html'">Xem chi tiết </button>
+      </div>
+      <div class="room-card">
+        <img src="https://1.bp.blogspot.com/-Xf8OaOH0j44/W3XHDJoVVgI/AAAAAAAAXOU/aPMbe710p0MlJYMYhcMtVML3oCHI5md5wCLcBGAs/s1600/khach-san-da-nang-gia-re-1.jpg" alt="">
+        <h3>Twin room</h3>
+        <p>4.000.000 VND</p>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <button class="book-btn" onclick="location.href='phong.html'">Xem chi tiết </button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-info">
+      <img src="logoo.png" alt="Logo nhỏ" class="footer-logo">
+      <ul>
+        <li>Địa chỉ: Số 123, Quận Ngũ Hành Sơn, Đà Nẵng</li>
+        <li>Email: DuLichTravel123@gmail.com</li>
+        <li>SĐT: 0123456789</li>
+        <li>Hotline: 19001010</li>
+        <li>Website: https://DuLichTravel123.vn</li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    const userIcon = document.querySelector('.user-icon');
+    const accountPanel = document.getElementById('accountPanel');
+    const successMsg = document.getElementById('successMsg');
+
+    userIcon.addEventListener('click', () => {
+      accountPanel.style.display = accountPanel.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', function(event) {
+      if (!accountPanel.contains(event.target) && !userIcon.contains(event.target)) {
+        accountPanel.style.display = 'none';
+      }
+    });
+
+    function submitReview() {
+      const username = document.getElementById('username').value.trim();
+      const gmail = document.getElementById('gmail').value.trim();
+      const review = document.getElementById('review').value.trim();
+
+      if (username && gmail && review) {
+        successMsg.style.display = 'block';
+        successMsg.style.opacity = 0;
+        setTimeout(() => {
+          successMsg.style.opacity = 1;
+          successMsg.style.transition = 'opacity 0.5s ease-in';
+        }, 100);
+
+        document.querySelector('.btn-submit').disabled = true;
+        setTimeout(() => {
+          document.querySelector('.btn-submit').disabled = false;
+        }, 3000);
+      } else {
+        alert('Vui lòng điền đầy đủ Tên, Gmail và Đánh giá.');
+      }
+    }
+
+    function handlePayment() {
+      const name = document.querySelector('.booking-form input[placeholder="Họ và tên"]').value.trim();
+      const phone = document.querySelector('.booking-form input[placeholder="Số điện thoại"]').value.trim();
+      const email = document.querySelector('.booking-form input[type="email"]').value.trim();
+      const paymentMsg = document.getElementById('paymentSuccess');
+
+      if (name && phone && email) {
+        paymentMsg.style.display = 'block';
+        paymentMsg.style.opacity = 0;
+        setTimeout(() => {
+          paymentMsg.style.opacity = 1;
+          paymentMsg.style.transition = 'opacity 0.5s ease-in';
+        }, 100);
+
+        document.getElementById('paymentBtn').disabled = true;
+        setTimeout(() => {
+          document.getElementById('paymentBtn').disabled = false;
+        }, 3000);
+      } else {
+        alert('Vui lòng điền đầy đủ Họ tên, SĐT và Gmail.');
+      }
+    }
+
+    function toggleDropdown(event) {
+      event.stopPropagation();
+      const menu = document.getElementById("bookingDropdown");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    document.addEventListener("click", function(event) {
+      const dropdown = document.getElementById("bookingDropdown");
+      if (!dropdown.contains(event.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
